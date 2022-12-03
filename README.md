@@ -12,5 +12,6 @@ Monorep for WASM RPC framework
 
 ## wasmrpc engine
 - Manage functions in kubernetes cluster
-- Auto scale functions
-- Reverse proxy for functions
+- Auto scale functions in cluster
+- Proxy to call functions
+- Authorization for functions
