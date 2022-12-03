@@ -1,7 +1,8 @@
 # wasmrpc
 Monorep for WASM RPC framework
 
-## wrpc-cli
+## cli (wrpc)
+- Cli tool help build and manage functions
 - Create RPC functions
 - Create & Manage Kubernetes Pods
 - Setup a k8s cluster for wasmrpc
@@ -10,8 +11,20 @@ Monorep for WASM RPC framework
 - Generate client libraries for supported languages
 
 
-## wasmrpc engine
+## engine
 - Manage functions in kubernetes cluster
 - Auto scale functions in cluster
 - Proxy to call functions
 - Authorization for functions
+
+## worker
+- Workers are language runtimes that run functions written in different languages
+
+## clients
+- Client library to help build functions in different languages
+
+## docs
+- Documentation site for wasmrpc
+
+## examples
+- Example of functions demonstrating different features
