@@ -1,7 +1,7 @@
 # wrpc
 Monorep for wRPC framework
 
-## cli (wrpc)
+## cli
 - Cli tool help build and manage functions
 - Create RPC functions
 - Create & Manage Kubernetes Pods
