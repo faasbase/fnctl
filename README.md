@@ -1,5 +1,5 @@
-# wasmrpc
-Monorep for WASM RPC framework
+# wrpc
+Monorep for wRPC framework
 
 ## cli (wrpc)
 - Cli tool help build and manage functions
