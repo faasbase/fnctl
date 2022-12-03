@@ -20,6 +20,9 @@ Monorep for WASM RPC framework
 ## worker
 - Workers are language runtimes that run functions written in different languages
 
+## registry
+- Function and Application hub for global dev community
+
 ## clients
 - Client library to help build functions in different languages
 
