@@ -1,4 +1,14 @@
+mod application;
+mod authn;
+mod function;
+mod workspace;
+
+use authn::controller::AuthNController;
 use clap::{Parser, Subcommand};
+
+use crate::{
+    application::controller::ApplicationController, function::controlller::FunctionController,
+};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -22,7 +32,7 @@ enum Commands {
     /// Generate function
     Deploy {
         #[clap(value_parser)]
-        application_id: Option<String>,
+        application_id: String,
     },
     /// Push the function/application to wasmrpc registory
     Push,
@@ -37,11 +47,11 @@ enum CreateCommands {
     /// Generate function
     Function {
         #[clap(value_parser)]
-        name: Option<String>,
+        name: String,
     },
     Application {
         #[clap(value_parser)]
-        name: Option<String>,
+        name: String,
     },
 }
 
@@ -55,41 +65,51 @@ enum GetCommands {
 
 fn main() {
     let cli = Cli::parse();
+    let function_controller = FunctionController::new();
+    let application_controller = ApplicationController::new();
+    let authn_controller = AuthNController::new();
+
     match &cli.command {
         Some(Commands::Create { command }) => {
             if let Some(command) = command {
                 match command {
                     CreateCommands::Function { name } => {
-                        if let Some(name) = name {
-
-                        }
-                    },
-                    CreateCommands::Application { name } => {
-                        if let Some(name) = name {
-                            
-                        }
+                        function_controller
+                            .create_function(name.to_string())
+                            .unwrap();
                     }
+                    CreateCommands::Application { name } => application_controller
+                        .create_application(name.to_string())
+                        .unwrap(),
                 }
             }
         }
-        Some(Commands::Push) => {}
+        Some(Commands::Push) => {
+            // TODO: Find out the current scope is application or function
+        }
         Some(Commands::Get { command }) => {
             if let Some(command) = command {
                 match command {
-                    GetCommands::Functions => {}
-                    GetCommands::Applications => {}
+                    GetCommands::Functions => {
+                        function_controller.get_functions().unwrap();
+                    }
+                    GetCommands::Applications => application_controller.get_applications().unwrap(),
                 }
             }
         }
         Some(Commands::Deploy { application_id }) => {
-            if let Some(application_id) = application_id {
-
-            }
-        },
-        Some(Commands::Login) => {}
-        Some(Commands::Logout) => {}
+            application_controller
+                .delete_application(application_id.to_string())
+                .unwrap();
+        }
+        Some(Commands::Login) => {
+            authn_controller.login().unwrap();
+        }
+        Some(Commands::Logout) => {
+            authn_controller.logout().unwrap();
+        }
         None => {
-            println!("Lost? type `egnitely --help` to see list of commands")
+            println!("Lost? type `faasly --help` to see list of commands")
         }
     }
 }
