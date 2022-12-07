@@ -26,8 +26,4 @@ impl FunctionController {
     pub fn push_function(&self) -> Result<(), Box<dyn Error>> {
         Ok(())
     }
-
-    pub fn delete_function(&self, id: String) -> Result<(), Box<dyn Error>> {
-        Ok(())
-    }
 }

@@ -1,5 +1,5 @@
 [package]
-name = "fn"
+name = "fnctl"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,3 +7,22 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0.29", features = ["derive"] }
+reqwest = { version = "0.11.13", features = ["json", "multipart", "stream"] }
+uuid = { version = "1.1.0", features = ["serde"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+colored = "2.0.0"
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7.3", features = ["codec"] }
+rpassword = "7.0.0"
+open = "3.0.2"
+pickledb = "0.5.1"
+dirs = "4.0"
+walkdir = "2.3.2"
+zip = "0.6.2"
+toml = "0.5.9"
+convert_case = "0.6.0"
+indicatif = "0.17.1"
+chrono = { version = "0.4.22", features = ["serde"]}
+prettytable-rs = "^0.9"
+semver = "1.0.14"

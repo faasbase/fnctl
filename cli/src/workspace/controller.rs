@@ -8,6 +8,7 @@ impl WorkspaceController {
     }
 
     pub fn configure_workspace(&self, name: String) -> Result<(), Box<dyn Error>> {
+         println!("Configuring workspace: {}", name);
         Ok(())
     }
 
