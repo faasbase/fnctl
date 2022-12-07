@@ -5,7 +5,7 @@ Monorep for fnRPC (high performance serverless rpc framework)
 - Cli tool help build and manage functions
 - Create RPC functions
 - Create & Manage Kubernetes Pods
-- Setup a k8s cluster for wasmrpc
+- Setup a k8s cluster for fnrpc functions
 - Build & Deploy functions to cluster
 - Update and Scale functions in cluster
 - Generate client libraries for supported languages
