@@ -1,5 +1,5 @@
-# wrpc
-Monorep for wRPC (high performance serverless rpc framework)
+# fnrpc
+Monorep for fnRPC (high performance serverless rpc framework)
 
 ## cli
 - Cli tool help build and manage functions
