@@ -1,0 +1,9 @@
+[workspace]
+
+members = [
+    "cli",
+    "engine",
+    "registry",
+    "clients/rust",
+    "worker/rust"
+]
