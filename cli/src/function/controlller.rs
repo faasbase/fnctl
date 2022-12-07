@@ -1,13 +1,21 @@
 use std::error::Error;
 
-pub struct FunctionController {}
+use super::generator::FunctionGenerator;
+
+pub struct FunctionController {
+    generator: FunctionGenerator
+}
 
 impl FunctionController {
     pub fn new() -> Self {
-        Self {}
+        let generator = FunctionGenerator::new();
+        Self {
+            generator
+        }
     }
 
     pub fn create_function(&self, name: String) -> Result<(), Box<dyn Error>> {
+        self.generator.generate_function(name, "rust".to_string()).unwrap();
         Ok(())
     }
 
