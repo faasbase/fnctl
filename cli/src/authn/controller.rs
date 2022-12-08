@@ -1,8 +1,8 @@
-use core::time;
-use std::{error::Error, collections::HashMap, path::Path, fs, thread};
 use colored::*;
+use core::time;
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 use serde_json::Value;
+use std::{collections::HashMap, error::Error, fs, path::Path, thread};
 
 use crate::authn::entities::{DeviceCodeResponse, TokenErrorResponse, TokenSuccessResponse};
 
@@ -15,14 +15,14 @@ impl AuthNController {
 
     pub async fn login(&self) -> Result<(), Box<dyn Error>> {
         let mut params = HashMap::new();
-        params.insert("client_id", "wYIqKC5ffQnzy9lpGGt4Lia98NH5ea4m");
+        params.insert("client_id", "dr22g7PhvG8pdQJ66k5vBoYCbfyLnr8t");
         params.insert("scope", "openid offline_access profile");
-        params.insert("audience", "https://dev.api.faasly.dev");
+        params.insert("audience", "https://api.faasly.dev");
 
         let client = reqwest::Client::new();
 
         let device_code_req = client
-            .post("https://dev-qgdysq-r.us.auth0.com/oauth/device/code")
+            .post("https://dev-d0m2qkwao0zc3lbs.us.auth0.com/oauth/device/code")
             .form(&params);
         let device_code_res = device_code_req
             .send()
@@ -48,13 +48,13 @@ impl AuthNController {
         }
 
         let mut token_params = HashMap::new();
-        token_params.insert("client_id", "wYIqKC5ffQnzy9lpGGt4Lia98NH5ea4m");
+        token_params.insert("client_id", "dr22g7PhvG8pdQJ66k5vBoYCbfyLnr8t");
         token_params.insert("grant_type", "urn:ietf:params:oauth:grant-type:device_code");
         token_params.insert("device_code", &device_code_res.device_code);
 
         loop {
             let token_req = client
-                .post("https://dev-qgdysq-r.us.auth0.com/oauth/token")
+                .post("https://dev-d0m2qkwao0zc3lbs.us.auth0.com/oauth/token")
                 .form(&token_params);
             let token_res = token_req.send().await?.json::<Value>().await?;
             let error = serde_json::from_value::<TokenErrorResponse>(token_res.clone());
@@ -79,8 +79,11 @@ impl AuthNController {
                                     db.set("access_token", &_token_data.access_token)?;
                                     db.set("refresh_token", &_token_data.refresh_token)?;
                                     db.set("id_token", &_token_data.id_token)?;
+
                                 } else {
-                                    if !(Path::new(&home_dir.join(".faasly").join("creds")).is_file()) {
+                                    if !(Path::new(&home_dir.join(".faasly").join("creds"))
+                                        .is_file())
+                                    {
                                         let mut db = PickleDb::new(
                                             home_dir.join(".faasly").join("creds"),
                                             PickleDbDumpPolicy::AutoDump,
@@ -89,7 +92,7 @@ impl AuthNController {
                                         db.set("access_token", &_token_data.access_token)?;
                                         db.set("refresh_token", &_token_data.refresh_token)?;
                                         db.set("id_token", &_token_data.id_token)?;
-                                    } else{
+                                    } else {
                                         let mut db = PickleDb::load(
                                             home_dir.join(".faasly").join("creds"),
                                             PickleDbDumpPolicy::AutoDump,
@@ -98,6 +101,7 @@ impl AuthNController {
                                         db.set("access_token", &_token_data.access_token)?;
                                         db.set("refresh_token", &_token_data.refresh_token)?;
                                         db.set("id_token", &_token_data.id_token)?;
+
                                     }
                                 }
                                 println!("");
@@ -114,7 +118,7 @@ impl AuthNController {
             }
             thread::sleep(time::Duration::from_secs(device_code_res.interval));
         }
-        
+
         Ok(())
     }
 
