@@ -2,6 +2,7 @@ mod application;
 mod authn;
 mod function;
 mod workspace;
+mod config;
 
 use authn::controller::AuthNController;
 use clap::{Parser, Subcommand};
@@ -68,7 +69,7 @@ enum GetCommands {
     /// Get list of providers
     Applications,
     /// Get list of workspaces
-    Workspace,
+    Workspaces,
 }
 
 #[tokio::main]
@@ -101,10 +102,10 @@ async fn main() {
             if let Some(command) = command {
                 match command {
                     GetCommands::Functions => {
-                        function_controller.get_functions().unwrap();
+                        function_controller.get_functions().await.unwrap();
                     }
-                    GetCommands::Applications => application_controller.get_applications().unwrap(),
-                    GetCommands::Workspace => workspace_controller.get_workspaces().unwrap(),
+                    GetCommands::Applications => application_controller.get_applications().await.unwrap(),
+                    GetCommands::Workspaces => workspace_controller.get_workspaces().await.unwrap(),
                 }
             }
         }
