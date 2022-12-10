@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{error::Error, path::Path, fs};
 
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 use prettytable::{row, Table};
@@ -65,10 +65,10 @@ impl FunctionController {
                     } else {
                         println!("No functions found, please check if you are logged in");
                     }
-                } else{
+                } else {
                     println!("Bad workspace id, please check if its configured correctly")
                 }
-            } else{
+            } else {
                 println!("Bad access_token, please check if you are logged in")
             }
         }
@@ -77,6 +77,20 @@ impl FunctionController {
     }
 
     pub fn push_function(&self) -> Result<(), Box<dyn Error>> {
+        if let Some(home_dir) = dirs::home_dir() {
+            if !(Path::new(&home_dir.join(".faasly")).is_dir()) {
+                fs::create_dir(home_dir.join(".faasly"))?;
+            }
+
+            if !(Path::new(&home_dir.join(".faasly/.temp")).is_dir()) {
+                fs::create_dir(home_dir.join(".faasly/.temp"))?;
+            }
+
+            
+
+
+
+        }
         Ok(())
     }
 }

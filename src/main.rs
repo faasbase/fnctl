@@ -119,7 +119,6 @@ async fn main() {
                 .configure_workspace(workspace_id.to_string())
                 .unwrap();
         }
-
         Some(Commands::Login) => {
             authn_controller.login().await.unwrap();
         }

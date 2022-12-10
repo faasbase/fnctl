@@ -56,4 +56,8 @@ impl FunctionGenerator {
         println!("Function generated successfully");
         Ok(())
     }
+
+    pub fn generate_rust_function_wrapper(&self, name: String) -> Result<(), Box<dyn Error>> {
+        Ok(())
+    }
 }
