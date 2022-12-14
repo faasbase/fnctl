@@ -21,32 +21,32 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// List functions, and applications
+    /// Login to registry
+    Login,
+    /// Logout of registry
+    Logout,
+    /// List functions, workspaces and applications from repository
     Get {
         #[clap(subcommand)]
         command: Option<GetCommands>,
-    },
-    /// Create a new wasmrpc function
-    Create {
-        #[clap(subcommand)]
-        command: Option<CreateCommands>,
-    },
-    /// Generate function
-    Deploy {
-        #[clap(value_parser)]
-        application_id: String,
     },
     /// Configure your current workspace
     ConfigureWorkspace {
         #[clap(value_parser)]
         workspace_id: String,
     },
-    /// Push the function/application to wasmrpc registory
+    /// Push the function/application to registry
     Push,
-    /// Login to your wasmrpc registory
-    Login,
-    /// Logout of your wasmrpc registory
-    Logout,
+    /// Create new function or application
+    Create {
+        #[clap(subcommand)]
+        command: Option<CreateCommands>,
+    },
+    /// Deploy application to cluster
+    Deploy {
+        #[clap(value_parser)]
+        application_id: String,
+    },
 }
 
 #[derive(Subcommand)]
@@ -66,7 +66,7 @@ enum CreateCommands {
 enum GetCommands {
     /// Get list of functions
     Functions,
-    /// Get list of providers
+    /// Get list of applications
     Applications,
     /// Get list of workspaces
     Workspaces,

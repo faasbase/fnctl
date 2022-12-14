@@ -85,10 +85,18 @@ impl FunctionController {
             if !(Path::new(&home_dir.join(".faasly/.temp")).is_dir()) {
                 fs::create_dir(home_dir.join(".faasly/.temp"))?;
             }
+            // Move the current function to temp folder
 
+            // TODO: Create a function wrapper with the function as lib in the temp folder
             
-
-
+            // Zip the wrapper and the function lib
+            
+            // Push the zip to the server
+            
+            // Create/Update a function assosiated with the zip
+            
+            // Cleanup the function from temp folder
+            
 
         }
         Ok(())
