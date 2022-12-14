@@ -30,12 +30,12 @@ enum Commands {
         #[clap(subcommand)]
         command: Option<GetCommands>,
     },
-    /// Configure your current workspace
+    /// Configure your default workspace
     ConfigureWorkspace {
         #[clap(value_parser)]
         workspace_id: String,
     },
-    /// Push the function/application to registry
+    /// Push function or application to registry
     Push,
     /// Create new function or application
     Create {
