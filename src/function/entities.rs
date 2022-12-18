@@ -30,7 +30,7 @@ pub struct CargoTomlSchema {
 #[derive(Deserialize, Clone)]
 pub struct Package {
     pub name: String,
-    pub description: Option<String>,
     pub version: String,
-    pub egnitely_workspace: Option<String>,
+    pub visibility: Option<String>,
+    pub description: Option<String>,
 }

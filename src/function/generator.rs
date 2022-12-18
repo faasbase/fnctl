@@ -57,7 +57,39 @@ impl FunctionGenerator {
         Ok(())
     }
 
-    pub fn _generate_rust_function_wrapper(&self, _name: String) -> Result<(), Box<dyn Error>> {
+    pub fn _generate_rust_function_wrapper(&self, name: String, description: String) -> Result<(), Box<dyn Error>> {
+        let lib_rs = "".to_string();
+
+        let mut cargo_toml = "[package] \nname = \"".to_string();
+        cargo_toml.push_str(&name);
+        cargo_toml.push_str("\"\ndescription = \"");
+        cargo_toml.push_str(&description);
+        cargo_toml.push_str("\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nserde_json = \"1.0\"\nschemars = \"0.8.11\"\n");
+
+        let gitignore = "/target\n/Cargo.lock";
+
+        let mut folder_name = name.clone();
+        folder_name.push_str("/src");
+
+        fs::create_dir(name.clone())?;
+        fs::create_dir(folder_name.clone())?;
+
+        let mut lib_rs_filepath = folder_name.clone();
+        lib_rs_filepath.push_str("/lib.rs");
+        let mut lib_rs_file = File::create(lib_rs_filepath)?;
+        lib_rs_file.write_all(lib_rs.as_bytes())?;
+
+        let mut cargo_toml_filepath = name.clone();
+        cargo_toml_filepath.push_str("/Cargo.toml");
+        let mut cargo_toml_file = File::create(cargo_toml_filepath)?;
+        cargo_toml_file.write_all(cargo_toml.as_bytes())?;
+
+        let mut gitignore_filepath = name.clone();
+        gitignore_filepath.push_str("/.gitignore");
+        let mut gitignore_file = File::create(gitignore_filepath)?;
+        gitignore_file.write_all(gitignore.as_bytes())?;
+        
+        println!("Function generated successfully");
         Ok(())
     }
 }

@@ -3,6 +3,7 @@ mod authn;
 mod function;
 mod workspace;
 mod config;
+mod utils;
 
 use authn::controller::AuthNController;
 use clap::{Parser, Subcommand};
@@ -21,7 +22,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Login to registry
+    /// Login to registry (Default: https://faasly.dev)
     Login,
     /// Logout of registry
     Logout,
@@ -96,7 +97,7 @@ async fn main() {
             }
         }
         Some(Commands::Push) => {
-            function_controller.push_function().unwrap();
+            function_controller.push_function().await.unwrap();
         }
         Some(Commands::Get { command }) => {
             if let Some(command) = command {
