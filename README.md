@@ -1,2 +1,2 @@
 # fnctl 
-CLI tool for building and managing functions for faasly
+CLI tool for building and deploying serverless applications
