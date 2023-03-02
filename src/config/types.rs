@@ -10,7 +10,7 @@ pub struct ServerErrorResponse {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct FaaslyResponse<T> {
+pub struct FaasbaseResponse<T> {
     pub data: T,
     pub status: String,
 }

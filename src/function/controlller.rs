@@ -1,7 +1,7 @@
 use super::{entities::CargoTomlSchema, generator::FunctionGenerator};
 use crate::utils::error::CLIError;
 use crate::{
-    config::{get_server_url, types::FaaslyResponse},
+    config::{get_server_url, types::FaasbaseResponse},
     function::entities::FunctionResponse,
 };
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
@@ -43,7 +43,7 @@ impl FunctionController {
         let client = reqwest::Client::new();
         if let Some(home_dir) = dirs::home_dir() {
             let db = PickleDb::load(
-                home_dir.join(".faasly").join("creds"),
+                home_dir.join(".faasbase").join("creds"),
                 PickleDbDumpPolicy::DumpUponRequest,
                 SerializationMethod::Json,
             ).unwrap();
@@ -62,7 +62,7 @@ impl FunctionController {
                         .send()
                         .await.unwrap();
                     if get_functions_response.status().is_success() {
-                        let get_functions: FaaslyResponse<Vec<FunctionResponse>> =
+                        let get_functions: FaasbaseResponse<Vec<FunctionResponse>> =
                             get_functions_response.json().await.unwrap();
 
                         let mut table = Table::new();
@@ -89,23 +89,23 @@ impl FunctionController {
 
     pub async fn push_function(&self) -> Result<(), Box<dyn Error>> {
         if let Some(home_dir) = dirs::home_dir() {
-            if !(Path::new(&home_dir.join(".faasly")).is_dir()) {
-                fs::create_dir(home_dir.join(".faasly")).unwrap();
+            if !(Path::new(&home_dir.join(".faasbase")).is_dir()) {
+                fs::create_dir(home_dir.join(".faasbase")).unwrap();
             }
 
-            if !(Path::new(&home_dir.join(".faasly/temp")).is_dir()) {
-                fs::create_dir(home_dir.join(".faasly/temp")).unwrap();
+            if !(Path::new(&home_dir.join(".faasbase/temp")).is_dir()) {
+                fs::create_dir(home_dir.join(".faasbase/temp")).unwrap();
             }
 
             let contents = fs::read_to_string("Cargo.toml").unwrap();
             let data: CargoTomlSchema = toml::from_str(&contents).unwrap();
 
-            if !(Path::new(&home_dir.join(format!(".faasly/temp/{}", data.package.name))).is_dir())
+            if !(Path::new(&home_dir.join(format!(".faasbase/temp/{}", data.package.name))).is_dir())
             {
-                fs::create_dir(home_dir.join(format!(".faasly/temp/{}", data.package.name))).unwrap();
+                fs::create_dir(home_dir.join(format!(".faasbase/temp/{}", data.package.name))).unwrap();
             }
 
-            let zip_file = home_dir.join(format!(".faasly/temp/{}.zip", data.package.name));
+            let zip_file = home_dir.join(format!(".faasbase/temp/{}.zip", data.package.name));
             let path = Path::new(&zip_file);
             let file = File::create(&path).unwrap();
 
@@ -146,7 +146,7 @@ impl FunctionController {
 
             let client = reqwest::Client::new();
             let db = PickleDb::load(
-                home_dir.join(".faasly").join("creds"),
+                home_dir.join(".faasbase").join("creds"),
                 PickleDbDumpPolicy::DumpUponRequest,
                 SerializationMethod::Json,
             ).unwrap();
@@ -178,7 +178,7 @@ impl FunctionController {
                         .await.unwrap();
 
                     if get_function_response.status().is_success() {
-                        let get_function: FaaslyResponse<FunctionResponse> =
+                        let get_function: FaasbaseResponse<FunctionResponse> =
                             get_function_response.json().await.unwrap();
                         if let Some(latest_version) = get_function.data.latest_version {
                             let current_version = Version::parse(&data.package.version.clone()).unwrap();
@@ -216,12 +216,17 @@ impl FunctionController {
                             ));
                         }
                     } else {
+                        let visibility  = match data.package.visibility {
+                            Some(visibility) => visibility,
+                            None => "PUBLIC".to_string(),
+                        };
+
                         let create_function_response = client
                             .post(format!("{}/functions", get_server_url()))
                             .header("Authorization", format!("Bearer {}", access_token))
                             .json(&json! {{
                                 "name": data.package.name.clone(),
-                                "visibility": data.package.visibility.clone(),
+                                "visibility": visibility,
                                 "description": data.package.description.clone(),
                                 "latest_version": data.package.version.clone(),
                                 "workspace_id": workspace_id,
@@ -230,7 +235,7 @@ impl FunctionController {
                             .await.unwrap();
 
                         if create_function_response.status().is_success() {
-                            let create_function: FaaslyResponse<FunctionResponse> =
+                            let create_function: FaasbaseResponse<FunctionResponse> =
                                 create_function_response.json().await.unwrap();
                             let _upload_response = client
                                 .post(format!(

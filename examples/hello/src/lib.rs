@@ -18,12 +18,18 @@ pub struct Output {
 	pub data: Value,
 }
 
-pub fn handler(data: Input) -> Result<Output, Box<dyn Error>> {
+pub fn handler(Json(data): Json<Input>) -> impl IntoResponse {
 	// TODO: implement your function here
 
 	let output = Output {
 		name: "hello".to_string(),
 		data: serde_json::to_value(data)?,
 	};
-	Ok(output)
+	(
+		StatusCode::OK,
+		Json(json!({
+			"status": "ok",
+			"data": output,
+		})),
+)
 }

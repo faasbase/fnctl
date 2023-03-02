@@ -1,7 +1,6 @@
 [package] 
 name = "hello"
 description = "Replace this with your function description"
-visibility = "public"
 version = "0.1.1"
 edition = "2021"
 

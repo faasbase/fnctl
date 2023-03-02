@@ -5,10 +5,10 @@ pub fn get_server_url() -> String {
     match app_env {
         Ok(app_env) => {
             if app_env == "dev" {
-                return "https://api.faasly.dev".to_string();
+                return "https://api.faasbase.com".to_string();
             }
-            "https://api.faasly.dev".to_string()
+            "https://api.faasbase.com".to_string()
         }
-        Err(_err) => "https://api.faasly.dev".to_string(),
+        Err(_err) => "https://api.faasbase.com".to_string(),
     }
 }

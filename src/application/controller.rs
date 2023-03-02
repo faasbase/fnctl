@@ -3,7 +3,7 @@ use std::error::Error;
 use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 use prettytable::{Table, row};
 
-use crate::{config::{get_server_url, types::FaaslyResponse}, application::entities::ApplicationResponse};
+use crate::{config::{get_server_url, types::FaasbaseResponse}, application::entities::ApplicationResponse};
 
 pub struct ApplicationController {}
 
@@ -22,7 +22,7 @@ impl ApplicationController {
         let client = reqwest::Client::new();
         if let Some(home_dir) = dirs::home_dir() {
             let db = PickleDb::load(
-                home_dir.join(".faasly").join("creds"),
+                home_dir.join(".faasbase").join("creds"),
                 PickleDbDumpPolicy::DumpUponRequest,
                 SerializationMethod::Json,
             )?;
@@ -40,7 +40,7 @@ impl ApplicationController {
                         .send()
                         .await?;
                     if get_applications_response.status().is_success() {
-                        let get_applications: FaaslyResponse<Vec<ApplicationResponse>> =
+                        let get_applications: FaasbaseResponse<Vec<ApplicationResponse>> =
                             get_applications_response.json().await?;
 
                         let mut table = Table::new();

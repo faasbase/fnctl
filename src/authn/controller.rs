@@ -17,7 +17,7 @@ impl AuthNController {
         let mut params = HashMap::new();
         params.insert("client_id", "dr22g7PhvG8pdQJ66k5vBoYCbfyLnr8t");
         params.insert("scope", "openid offline_access profile");
-        params.insert("audience", "https://api.faasly.dev");
+        params.insert("audience", "https://api.faasbase.com");
 
         let client = reqwest::Client::new();
 
@@ -61,7 +61,7 @@ impl AuthNController {
             match error {
                 Ok(err) => {
                     if err.error == "authorization_pending".to_string() {
-                        println!("CLI will wait while you login to Egnitely in your browser, you can close it by pressing CTRL+C");
+                        println!("CLI will wait while you login to Faasbase in your browser, you can close it by pressing CTRL+C");
                     }
                 }
                 Err(_err) => {
@@ -69,10 +69,10 @@ impl AuthNController {
                     match token_data {
                         Ok(_token_data) => {
                             if let Some(home_dir) = dirs::home_dir() {
-                                if !(Path::new(&home_dir.join(".faasly")).is_dir()) {
-                                    fs::create_dir(home_dir.join(".faasly"))?;
+                                if !(Path::new(&home_dir.join(".faasbase")).is_dir()) {
+                                    fs::create_dir(home_dir.join(".faasbase"))?;
                                     let mut db = PickleDb::new(
-                                        home_dir.join(".faasly").join("creds"),
+                                        home_dir.join(".faasbase").join("creds"),
                                         PickleDbDumpPolicy::AutoDump,
                                         SerializationMethod::Json,
                                     );
@@ -81,11 +81,11 @@ impl AuthNController {
                                     db.set("id_token", &_token_data.id_token)?;
 
                                 } else {
-                                    if !(Path::new(&home_dir.join(".faasly").join("creds"))
+                                    if !(Path::new(&home_dir.join(".faasbase").join("creds"))
                                         .is_file())
                                     {
                                         let mut db = PickleDb::new(
-                                            home_dir.join(".faasly").join("creds"),
+                                            home_dir.join(".faasbase").join("creds"),
                                             PickleDbDumpPolicy::AutoDump,
                                             SerializationMethod::Json,
                                         );
@@ -94,7 +94,7 @@ impl AuthNController {
                                         db.set("id_token", &_token_data.id_token)?;
                                     } else {
                                         let mut db = PickleDb::load(
-                                            home_dir.join(".faasly").join("creds"),
+                                            home_dir.join(".faasbase").join("creds"),
                                             PickleDbDumpPolicy::AutoDump,
                                             SerializationMethod::Json,
                                         )?;
@@ -124,9 +124,9 @@ impl AuthNController {
 
     pub async fn logout(&self) -> Result<(), Box<dyn Error>> {
         if let Some(home_dir) = dirs::home_dir() {
-            if Path::new(&home_dir.join(".faasly")).is_dir() {
+            if Path::new(&home_dir.join(".faasbase")).is_dir() {
                 let mut db = PickleDb::load(
-                    home_dir.join(".faasly").join("creds"),
+                    home_dir.join(".faasbase").join("creds"),
                     PickleDbDumpPolicy::DumpUponRequest,
                     SerializationMethod::Json,
                 )?;

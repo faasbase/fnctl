@@ -22,7 +22,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Login to registry (Default: https://faasly.dev)
+    /// Login to registry (Default: https://faasbase.dev)
     Login,
     /// Logout of registry
     Logout,
@@ -127,7 +127,7 @@ async fn main() {
             authn_controller.logout().await.unwrap();
         }
         None => {
-            println!("Lost? type `faasly --help` to see list of commands")
+            println!("Lost? type `faasbase --help` to see list of commands")
         }
     }
 }

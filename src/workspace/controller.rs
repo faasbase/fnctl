@@ -5,7 +5,7 @@ use prettytable::{row, Table};
 
 use crate::config::{
     get_server_url,
-    types::{FaaslyResponse, WorkspaceResponse},
+    types::{FaasbaseResponse, WorkspaceResponse},
 };
 
 pub struct WorkspaceController {}
@@ -19,7 +19,7 @@ impl WorkspaceController {
         println!("Configuring workspace: {}", workspace_id);
         if let Some(home_dir) = dirs::home_dir() {
             let mut db = PickleDb::load(
-                home_dir.join(".faasly").join("creds"),
+                home_dir.join(".faasbase").join("creds"),
                 PickleDbDumpPolicy::AutoDump,
                 SerializationMethod::Json,
             )?;
@@ -33,7 +33,7 @@ impl WorkspaceController {
         let client = reqwest::Client::new();
         if let Some(home_dir) = dirs::home_dir() {
             let db = PickleDb::load(
-                home_dir.join(".faasly").join("creds"),
+                home_dir.join(".faasbase").join("creds"),
                 PickleDbDumpPolicy::DumpUponRequest,
                 SerializationMethod::Json,
             )?;
@@ -46,7 +46,7 @@ impl WorkspaceController {
                     .await?;
 
                 if get_workspaces_response.status().is_success() {
-                    let get_workspaces: FaaslyResponse<Vec<WorkspaceResponse>> =
+                    let get_workspaces: FaasbaseResponse<Vec<WorkspaceResponse>> =
                         get_workspaces_response.json().await?;
 
                     let mut table = Table::new();
