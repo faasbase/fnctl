@@ -24,7 +24,7 @@ impl FunctionGenerator {
 
     pub fn generate_rust_function(&self, name: String) -> Result<(), Box<dyn Error>> {
         println!("Generating Rust function: {}", name);
-        let lib_rs = "use std::error::Error;\n\nuse schemars::JsonSchema;\nuse serde::{Deserialize, Serialize};\nuse serde_json::{Value};\n\n// TODO: replace the fields in this struct with your own input data structure\n#[derive(Serialize, Deserialize, JsonSchema, Debug)]\npub struct Input {\n\tpub firstname: String,\n\tpub lastname: String,\n}\n\n// TODO: replace the fields in this struct with your own output data structure\n#[derive(Serialize, Deserialize, JsonSchema, Debug)]\npub struct Output {\n\tpub name: String,\n\tpub data: Value,\n}\n\npub fn handler(Json(data): Json<Input>) -> impl IntoResponse {\n\t// TODO: implement your function here\n\n\tlet output = Output {\n\t\tname: \"hello\".to_string(),\n\t\tdata: serde_json::to_value(data)?,\n\t};\n\t(\n\t\tStatusCode::OK,\n\t\tJson(json!({\n\t\t\t\"status\": \"ok\",\n\t\t\t\"data\": output,\n\t\t})),\n)\n}\n".to_string();
+        let lib_rs = "use axum::{http::StatusCode, response::IntoResponse, Json};\n\nuse schemars::JsonSchema;\nuse serde::{Deserialize, Serialize};\nuse serde_json::{Value, json};\n\n// TODO: replace the fields in this struct with your own input data structure\n#[derive(Serialize, Deserialize, JsonSchema, Debug)]\npub struct Input {\n\tpub firstname: String,\n\tpub lastname: String,\n}\n\n// TODO: replace the fields in this struct with your own output data structure\n#[derive(Serialize, Deserialize, JsonSchema, Debug)]\npub struct Output {\n\tpub name: String,\n\tpub data: Value,\n}\n\npub fn handler(Json(data): Json<Input>) -> impl IntoResponse {\n\t// TODO: implement your function here\n\n\tlet output = Output {\n\t\tname: \"hello\".to_string(),\n\t\tdata: serde_json::to_value(data)?,\n\t};\n\t(\n\t\tStatusCode::OK,\n\t\tJson(json!({\n\t\t\t\"status\": \"ok\",\n\t\t\t\"data\": output,\n\t\t})\t),\n)\n}\n".to_string();
 
         let mut cargo_toml = "[package] \nname = \"".to_string();
         cargo_toml.push_str(&name);
@@ -64,7 +64,7 @@ impl FunctionGenerator {
         cargo_toml.push_str(&name);
         cargo_toml.push_str("\"\ndescription = \"");
         cargo_toml.push_str(&description);
-        cargo_toml.push_str("\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nserde_json = \"1.0\"\nschemars = \"0.8.11\"\n");
+        cargo_toml.push_str("\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nserde_json = \"1.0\"\nschemars = \"0.8.11\"\naxum = { version = \"0.5.3\", features= [\"multipart\"] }");
 
         let gitignore = "/target\n/Cargo.lock";
 
