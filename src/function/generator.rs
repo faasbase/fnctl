@@ -28,7 +28,7 @@ impl FunctionGenerator {
 
         let mut cargo_toml = "[package] \nname = \"".to_string();
         cargo_toml.push_str(&name);
-        cargo_toml.push_str("\"\ndescription = \"Replace this with your function description\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nserde_json = \"1.0\"\nschemars = \"0.8.11\"\n");
+        cargo_toml.push_str("\"\ndescription = \"Replace this with your function description\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nserde_json = \"1.0\"\nschemars = \"0.8.11\"\naxum = { version = \"0.5.3\", features= [\"multipart\"] }");
 
         let gitignore = "/target\n/Cargo.lock";
 
