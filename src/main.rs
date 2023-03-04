@@ -22,7 +22,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Login to registry (Default: https://faasbase.dev)
+    /// Login to registry (Default: https://faasbase.com)
     Login,
     /// Logout of registry
     Logout,
